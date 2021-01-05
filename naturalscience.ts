@@ -45,7 +45,7 @@ enum PIN {
     P2 = 3,
 };
 
-//% weight=10 color=#e7660b icon="\uf185" block="NaturalScience"
+//% weight=10 color=#e7660b icon="\uf185" block="Environment Science"
 //% groups="['Sensor', 'OLED', 'Motor', 'RGB', 'IOT']"
 namespace naturalScience {
     let data: number[] = [];
