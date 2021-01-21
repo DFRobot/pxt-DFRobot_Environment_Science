@@ -775,6 +775,11 @@ namespace naturalScience {
     function init(): void {
         return;
     }
+
+    //% block=" I2C init"
+    export function i2cinit():void{
+        init();
+    }
     /**
     * WiFi configuration
     * @param SSID to SSID ,eg: "yourSSID"
