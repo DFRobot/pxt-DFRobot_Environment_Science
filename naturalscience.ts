@@ -775,7 +775,9 @@ namespace naturalScience {
     function init(): void {
         return;
     }
-
+    /**
+     * init I2C
+     */
     //% block=" I2C init"
     export function i2cinit():void{
         init();
