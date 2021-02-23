@@ -997,7 +997,24 @@ namespace naturalScience {
     export function microIoT_http_TK_GET(field1: string, field2?: string, field3?: string, field4?: string, field5?: string, field6?: string, field7?: string, field8?: string): void {
         microIoT_setPara(SETHTTP_IP, OBLOQ_MQTT_EASY_IOT_SERVER_TK)
         let tempStr = ""
-        tempStr = "update?api_key=" + microIoT_THINGSPEAK_KEY + "&field1=" + field1 + "&field2=" + field2 + "&field3=" + field3 + "&field4=" + field4 + "&field5=" + field5 + "&field6=" + field6 + "&field7=" + field7 + "&field8=" + field8 + "\r"
+        tempStr = "update?api_key=" + microIoT_THINGSPEAK_KEY + "&field1=" + field1 
+        if(field2 != undefined){
+            tempStr += "&field2=" + field2
+        }else if(field3 != undefined){
+            tempStr += "&field3=" + field3
+        }else if(field4 != undefined){
+            tempStr += "&field4=" + field4
+        }else if(field5 != undefined){
+            tempStr += "&field5=" + field5
+        }else if(field6 != undefined){
+            tempStr += "&field6=" + field6
+        }else if(field7 != undefined){
+            tempStr += "&field7=" + field7
+        }else if(field8 != undefined){
+            tempStr += "&field8=" + field8
+        }else{
+            tempStr += "\r"
+        }
         microIoT_ParaRunCommand(GET_URL, tempStr);
     }
 
