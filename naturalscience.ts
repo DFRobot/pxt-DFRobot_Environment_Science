@@ -1014,8 +1014,6 @@ namespace naturalScience {
         if(field8 != undefined)
             tempStr += "&field8=" + field8
         
-        tempStr += "\r"
-        
         microIoT_ParaRunCommand(GET_URL, tempStr);
     }
 
