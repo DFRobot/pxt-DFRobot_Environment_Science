@@ -12,7 +12,8 @@
         "sendBuffer.asm",
         "i2c.cpp",
         "naturalscience.ts",
-        "_locales/zh/EnvironmentScience-strings.json",
+        "_locales/ch-zh/EnvironmentScience-strings.json",
+        "_locales/ch-tw/EnvironmentScience-strings.json",
         "shims.d.ts",
         "enums.d.ts"
     ],
