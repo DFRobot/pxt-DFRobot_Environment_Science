@@ -1,6 +1,10 @@
-# Environment Science
+# MBT0034 Environment Science Expansion Board V2.0 for micro:bit
 
-[无](无)
+This micro:bit-based expansion board, specially designed for STEAM education, allows students to measure environmental conditions for scientific experiments by using rich on-board sensors that cover all basic aspects of nature and science in daily life, which helps them explore the related science knowledge and understand nature phenomenon. It aims to provide a platform for students to learn science theory with practices and bring science education closer to daily life!
+
+[Integrated sensors include UV sensor, temperature sensor, humidity sensor, air pressure sensor, sound sensor, light sensor, water temperature sensor, and a TDS (Total Dissolved Solids) water quality sensor, soil moisture sensor, TVOC, CO2 sensor, etc.](https://www.dfrobot.com/product-2194.html)
+
+
 ## Basic usage
 
 * Request sensor data

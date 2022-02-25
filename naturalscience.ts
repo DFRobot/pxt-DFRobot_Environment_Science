@@ -1,7 +1,7 @@
 /** 
  * @file pxt-DFRobot_NaturalScience-V20/naturalscience.ts
  * @brief DFRobot's NaturalScience makecode library.
- * @n [Get the module here](等官网网址)
+ * @n [Get the module here]
  * @n 
  * 
  * @copyright    [DFRobot](http://www.dfrobot.com), 2016
