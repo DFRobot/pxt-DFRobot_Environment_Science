@@ -34,5 +34,5 @@
     "naturalScience.microIoT_http_TK_GET|block":"ThingSpeak 發送 值1:%field1||值2:%field2|值3:%field3|值4:%field4|值5:%field5|值6:%field6|值7:%field7 值8:%field8",
     "naturalScience.microIoT_ThingSpeak_configura|block": "ThingSpeak 配置 密鑰: %KEY",
     "naturalScience.moisture|block":"%pin 引脚獲取土壤溼度",
-    "naturalScience.i2cinit|block":"初始化I2C"
+    "naturalScience.i2cinit|block":"初始化主板"
 }

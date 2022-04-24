@@ -132,7 +132,35 @@ namespace naturalScience {
     let HTTP_PORT = ""
     let microIoT_IP = "0.0.0.0"
     let G_city = 0;
-
+    //% weight=120
+    //%block="initialize Board"
+    export function i2cinit(): void {
+        let Version_v = 0;
+        pins.i2cWriteNumber(0x10, 0X0A, NumberFormat.Int8LE);
+        Version_v = pins.i2cReadNumber(0x10, NumberFormat.Int8LE);
+        while (Version_v == 0) {
+            basic.showLeds(`
+                # . . . #
+                . # . # .
+                . . # . .
+                . # . # .
+                # . . . #
+                `, 10)
+            basic.pause(500)
+            basic.clearScreen()
+            pins.i2cWriteNumber(0x10, 0x0A, NumberFormat.Int8LE);
+            Version_v = pins.i2cReadNumber(0x10, NumberFormat.Int8LE);
+        }
+        basic.showLeds(`
+                . . . . .
+                . . . . #
+                . . . # .
+                # . # . .
+                . # . . .
+                `, 10)
+        basic.pause(500)
+        basic.clearScreen()
+    }
     /**
      * Request data
      */
@@ -778,10 +806,10 @@ namespace naturalScience {
     /**
      * init I2C
      */
-    //% block=" I2C init"
-    export function i2cinit():void{
-        init();
-    }
+    // //% block=" I2C init"
+    // export function i2cinit():void{
+    //     init();
+    // }
     /**
     * WiFi configuration
     * @param SSID to SSID ,eg: "yourSSID"
