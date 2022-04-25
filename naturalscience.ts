@@ -94,7 +94,8 @@ namespace naturalScience {
     let PUB_TOPIC4 = 0x0F
     let GET_URL = 0x10
     let POST_URL = 0x11
-
+    let GET_VERSION = 0x13
+    let DISCONNECT_MQTT = 0X15
     /*read para value*/
     let READ_PING = 0x01
     let READ_WIFISTATUS = 0x02
@@ -108,6 +109,7 @@ namespace naturalScience {
     /*para status */
     let PING_OK = 0x01
     let WIFI_DISCONNECT = 0x00
+    let WIFI_ERROR = 0x01
     let WIFI_CONNECTING = 0x02
     let WIFI_CONNECTED = 0x03
     let MQTT_CONNECTED = 0x01
@@ -132,9 +134,12 @@ namespace naturalScience {
     let HTTP_PORT = ""
     let microIoT_IP = "0.0.0.0"
     let G_city = 0;
+    let wifiConnected = 0;
+    let mqttState = 0;
     //% weight=120
     //%block="initialize Board"
     export function i2cinit(): void {
+        
         let Version_v = 0;
         pins.i2cWriteNumber(0x10, 0X0A, NumberFormat.Int8LE);
         Version_v = pins.i2cReadNumber(0x10, NumberFormat.Int8LE);
@@ -160,6 +165,17 @@ namespace naturalScience {
                 `, 10)
         basic.pause(500)
         basic.clearScreen()
+        let Version = microIoT_get_version();
+        if (Version == "V4.0") {
+
+            //serial.writeLine(Version)
+            let buf = pins.createBuffer(3);
+            buf[0] = 0x1E;
+            buf[1] = 0x02;
+            buf[2] = 0x17;
+            pins.i2cWriteBuffer(IIC_ADDRESS, buf);
+            basic.pause(2000)
+        }
     }
     /**
      * Request data
@@ -1078,6 +1094,7 @@ namespace naturalScience {
     }
 
     function microIoT_InquireStatus(): void {
+
         let buf = pins.createBuffer(3)
         let tempId = 0
         let tempStatus = 0
@@ -1102,16 +1119,25 @@ namespace naturalScience {
                     microIoTStatus = "WiFiConnecting"
                 } else if (tempStatus == WIFI_CONNECTED) {
                     microIoTStatus = "WiFiConnected"
-                } else if (tempStatus == WIFI_DISCONNECT) {
+                } else if (tempStatus == WIFI_DISCONNECT ) {
                     microIoTStatus = "WiFiDisconnect"
-                } else {
-                }
-                break;
+                    wifiConnected++;
+                    if (wifiConnected == 2){
+                        wifiConnected = 0;
+                        microIoT_runCommand(WIFI_CONNECTED);
+                    }
+                } else{
+                }break;
             case READ_MQTTSTATUS:
                 if (tempStatus == MQTT_CONNECTED) {
                     microIoTStatus = "MQTTConnected"
+                    mqttState = 1;
                 } else if (tempStatus == MQTT_CONNECTERR) {
                     microIoTStatus = "MQTTConnectERR"
+                    
+                } else if (tempStatus == 0) {//新版本修复重连
+                    microIoT_runCommand(DISCONNECT_MQTT);
+                    microIoT_runCommand(WIFI_CONNECTED);
                 }
                 break;
             case READ_SUBSTATUS:
@@ -1127,6 +1153,13 @@ namespace naturalScience {
                 microIoTStatus = "READ_IP"
                 microIoT_GetData(tempStatus)
                 microIoT_IP = RECDATA
+                if (mqttState == 1) {
+                    mqttState = 0;
+                    microIoT_runCommand(DISCONNECT_MQTT);
+                    basic.pause(200)
+                    microIoT_runCommand(CONNECT_MQTT);
+                    //microIoT_CheckStatus("MQTTConnected");
+                }
                 break;
             case SUB_TOPIC0:
                 microIoTStatus = "READ_TOPICDATA"
@@ -1171,7 +1204,7 @@ namespace naturalScience {
                 microIoTStatus = "READ_VERSION"
                 microIoT_GetData(tempStatus)
                 break;
-            default:
+            default: 
                 break;
         }
         basic.pause(200);
@@ -1179,5 +1212,15 @@ namespace naturalScience {
     basic.forever(function () {
         microIoT_InquireStatus();
     })
+
+    function microIoT_get_version(): string {
+        let buf = pins.createBuffer(3);
+        buf[0] = 0x1E;
+        buf[1] = RUN_COMMAND;
+        buf[2] = GET_VERSION;
+        pins.i2cWriteBuffer(IIC_ADDRESS, buf);
+        microIoT_CheckStatus("READ_VERSION");
+        return RECDATA
+    }
 
 }
