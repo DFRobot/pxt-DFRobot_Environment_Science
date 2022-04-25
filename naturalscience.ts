@@ -136,6 +136,7 @@ namespace naturalScience {
     let G_city = 0;
     let wifiConnected = 0;
     let mqttState = 0;
+    let versionState = 0;
     //% weight=120
     //%block="initialize Board"
     export function i2cinit(): void {
@@ -169,6 +170,7 @@ namespace naturalScience {
         if (Version == "V4.0") {
 
             //serial.writeLine(Version)
+            versionState = 1;
             let buf = pins.createBuffer(3);
             buf[0] = 0x1E;
             buf[1] = 0x02;
@@ -806,12 +808,20 @@ namespace naturalScience {
     }
 
     function microIoT_CheckStatus(cmd: string): void {
+        let startTime = input.runningTime();
+        let currentTime = 0;
         while (true) {
+            currentTime = input.runningTime();
             if (microIoTStatus == cmd) {
                 serial.writeString("OKOK\r\n");
                 return;
             }
             basic.pause(50);
+            if (versionState == 1) {
+                if ((currentTime - startTime) > 20000)
+                    return;
+            }
+
         }
     }
 
