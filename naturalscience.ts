@@ -1,7 +1,7 @@
 /** 
  * @file pxt-DFRobot_NaturalScience-V20/naturalscience.ts
  * @brief DFRobot's NaturalScience makecode library.
- * @n [Get the module here]
+ * @n [Get the module here]setOLEDShowString
  * @n 
  * 
  * @copyright    [DFRobot](http://www.dfrobot.com), 2016
@@ -368,7 +368,7 @@ namespace naturalScience {
                     buffer[i + 3] = String.charCodeAt(i);
                 }
                 pins.i2cWriteBuffer(0x10, buffer);
-                clearOLED(srow, String.length + scolumn, sleng);
+                clearOLED(String.length + scolumn, sleng, srow);
             }
             else {
                 let buffer: Buffer
@@ -440,6 +440,7 @@ namespace naturalScience {
         buffer[0] = 0x28
         buffer[1] = valuerow;
         buffer[2] = valuecolumnstart;
+        serial.writeValue("ff", valuecolumnstart)
         for (let i = 0; i < datalength; i++) {
             buffer[i + 3] = 32;
         }
@@ -1229,7 +1230,7 @@ namespace naturalScience {
         buf[1] = RUN_COMMAND;
         buf[2] = GET_VERSION;
         pins.i2cWriteBuffer(IIC_ADDRESS, buf);
-        microIoT_CheckStatus("READ_VERSION");
+        //microIoT_CheckStatus("READ_VERSION");
         return RECDATA
     }
 
