@@ -168,7 +168,6 @@ namespace naturalScience {
         basic.clearScreen()
         let Version = microIoT_get_version();
         if (Version == "V4.0") {
-
             //serial.writeLine(Version)
             versionState = 1;
             let buf = pins.createBuffer(3);
@@ -808,22 +807,21 @@ namespace naturalScience {
 
     }
 
-    function microIoT_CheckStatus(cmd: string): void {
+    function microIoT_CheckStatus(cmd: string): number {
         let startTime = input.runningTime();
+        let ret = 0;
         let currentTime = 0;
         while (true) {
             currentTime = input.runningTime();
             if (microIoTStatus == cmd) {
-                serial.writeString("OKOK\r\n");
-                return;
+                ret = 1;
+                break;
             }
             basic.pause(50);
-            if (versionState == 1) {
-                if ((currentTime - startTime) > 20000)
-                    return;
-            }
-
+            if ((currentTime - startTime) > 20000)
+                break;
         }
+        return ret;
     }
 
     //% advanced=true shim=i2c::init
@@ -1230,7 +1228,13 @@ namespace naturalScience {
         buf[1] = RUN_COMMAND;
         buf[2] = GET_VERSION;
         pins.i2cWriteBuffer(IIC_ADDRESS, buf);
-        //microIoT_CheckStatus("READ_VERSION");
+        if (microIoT_CheckStatus("READ_VERSION") == 1) {
+            serial.writeString("wifi card version ");
+            serial.writeString(RECDATA);
+            serial.writeString("\r\n");
+        } else {
+            serial.writeString("No wifi card is detected or an old wifi card is used\r\n");
+        }
         return RECDATA
     }
 
