@@ -202,7 +202,11 @@ namespace naturalScience {
     //% group="Sensor"
     //% blockId=naturalScience_ultraviolet block="ultraviolet"
     export function getUltraviolet(): string {
-        return data[0] + '.' + data[1];
+        let x = data[1];
+        if (x < 10) {
+            return data[0] + '.0' + x;
+        }
+        return data[0] + '.' + x;
     }
 
     /**
